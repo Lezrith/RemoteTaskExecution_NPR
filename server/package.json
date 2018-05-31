@@ -1,0 +1,15 @@
+{
+  "name": "rpc-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Krzysztof Tomczak",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "udp-rpc": "0.0.4"
+  }
+}
