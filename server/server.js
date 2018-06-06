@@ -13,8 +13,6 @@ const functions = [
     function runCommand(source, command, callback) {
         console.log(`RUNNING: ${command} (${source})`);
         var child = exec(command);
-        //child.stdout.pipe(process.stdout);
-        //child.stderr.pipe(process.stderr);
         child.stdout.addListener('data', (data) => {
             node.display(source, escaper.escape(data), null);
         });
@@ -23,6 +21,7 @@ const functions = [
         });
         child.on('exit', (code) => {
             node.exit(source, code, null);
+            console.log(`Task ENDED (${source})`);
         });
         children[source] = child;
     },
@@ -31,13 +30,20 @@ const functions = [
         const child = children[source];
         child.stdin.write(original);
     },
+    function closeClient(source, callback) {
+        const child = children[source];
+        if (child) {
+            child.kill('SIGINT');
+            console.log(`Task EXITED (${source})`);
+        }
+    },
     function display(source, line, callback) {},
     function exit(source, code, callback) {},
 ]
 
 const dgramType = dgram.createSocket('udp4');
-node = new UdpRpc(dgramType, 2137, functions);
+node = new UdpRpc(dgramType, 5555, functions);
 
 node.addListener('init', () => {
-    console.log("Ready to work");
+    console.log("Ready to work. Running on port 5555");
 });

@@ -9,7 +9,5 @@
   "author": "Krzysztof Tomczak",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.6.1",
-    "udp-rpc": "0.0.4"
   }
 }

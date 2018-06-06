@@ -12,6 +12,7 @@ const rl = readline.createInterface({
 const functions = [
     function runCommand(source, command, callback) {},
     function passStdin(source, line, callback) {},
+    function closeClient(source, callback) {},
     function display(source, line, callback) {
         const original = escaper.unescape(line);
         console.log(original);
@@ -32,6 +33,10 @@ const dgramType = dgram.createSocket('udp4');
 getPort().then(port => {
     const node = new UdpRpc(dgramType, getPort(), functions);
     node.addListener('init', () => {
+        process.on('SIGINT', () => {
+            node.closeClient(remote, null);
+            setTimeout(() => process.exit(0), 1000);
+        });
         rl.question('What command would you like to run?\n', (answer) => {
             node.runCommand(remote, escaper.escape(answer), null);
         });
